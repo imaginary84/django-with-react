@@ -1,0 +1,17 @@
+conda create --name=django-with-react python=3.8
+
+conda activate django-with-react 
+
+which python
+
+which pip
+
+pip list
+
+pip install "django~=3.0.0"
+
+django-admin startproject backend
+
+npm install --global yarn
+
+yarn create react-app frontend
