@@ -15,3 +15,22 @@ django-admin startproject backend
 npm install --global yarn
 
 yarn create react-app frontend
+
+
+--backend
+
+pip install black
+   vscode setting : python formatting provider
+
+pip install dango-debug-toolbar
+
+pip install pillow
+
+pip install djangorestframework
+
+pip install httpie
+
+--frontend
+yarn add axios
+
+
