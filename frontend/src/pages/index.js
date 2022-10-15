@@ -12,6 +12,7 @@ function Root() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/accounts/*" element={<AccountRoutes />} />
+        <Route path="/*" element={<div>존재하지않는 페이지입니다.</div>} />
       </Routes>
     </AppLayout>
   );

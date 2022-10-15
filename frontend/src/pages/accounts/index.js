@@ -2,14 +2,17 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Profile from "./Profile";
 import Login from "./Login";
-import Signup from "./Signup";
+import SignupReact from "./SignupReact";
+import SignupAntd from "./SignupAntd";
 
 function AccountRoutes() {
   return (
     <Routes>
       <Route path={"login"} element={<Login />} />
       <Route path={"profile"} element={<Profile />} />
-      <Route path={"signup"} element={<Signup />} />
+      <Route path={"signup.react"} element={<SignupReact />} />
+      <Route path={"signup.antd"} element={<SignupAntd />} />
+      <Route path="/*" element={<div>존재하지않는 페이지입니다.</div>} />
     </Routes>
   );
 }
