@@ -10,12 +10,12 @@ const reducer = (prev, action) => {
   // TODO:
   const { type, payload: jwtToken } = action;
   if (type === SET_TOKEN) {
-    const newState = { ...prev, jwtToken };
+    const newState = { ...prev, jwtToken, isAuthenticated: true };
     return UpdateWithSideEffect(newState, (state, dispatch) => {
       setStorageItem("jwtToken", jwtToken);
     });
   } else if (type === DELETE_TOKEN) {
-    const newState = { ...prev, jwtToken: "" };
+    const newState = { ...prev, jwtToken: "", isAuthenticated: false };
     return UpdateWithSideEffect(newState, (state, dispatch) => {
       setStorageItem("jwtToken", "");
     });
@@ -26,8 +26,10 @@ const reducer = (prev, action) => {
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  const jwtToken = getStorageItem("jwtToken", "");
   const [store, dispatch] = useReducerWithSideEffects(reducer, {
-    jwtToken: getStorageItem("jwtToken", ""),
+    jwtToken,
+    isAuthenticated: jwtToken.length > 0 ? true : false,
   });
 
   return (

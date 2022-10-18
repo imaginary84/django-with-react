@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-
 import Axios from "axios";
-
 import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
-
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAppContext, setToken, deleteToken } from "appStore";
 
 function Login() {
   const { dispatch } = useAppContext();
-  // const navigate = useNavigate();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const [fieldErrors, setFieldErrors] = useState({});
+  const { from: loginRedirectUrl } = location.state || { from: "/" }; //
 
   const onFinish = (values) => {
     async function fn() {
@@ -40,7 +37,7 @@ function Login() {
           icon: <SmileOutlined style={{ color: "#108ee9" }} />,
         });
 
-        // navigate("/accounts/login");
+        navigate(loginRedirectUrl);
       } catch (error) {
         if (error.response) {
           notification.open({
