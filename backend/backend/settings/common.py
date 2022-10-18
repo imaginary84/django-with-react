@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     # third apps
     "corsheaders",
     "rest_framework",
+    "rest_framework_jwt",
+    "rest_framework_jwt.blacklist",
     # local apps
     "accounts",
     "instagram",
@@ -139,5 +141,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-    ]
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ],
+}
+
+
+import datetime
+
+JWT_AUTH = {
+    "JWT_SECRET_KEY": SECRET_KEY,
+    "JWT_ALGORITHM": "HS256",
+    "JWT_ALLOW_REFRESH": True,
+    "JWT_EXPIRATION_DELTA": datetime.timedelta(days=7),
+    "JWT_REFRESH_EXPIRATION_DELTA": datetime.timedelta(days=28),
 }

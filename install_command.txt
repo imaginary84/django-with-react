@@ -30,8 +30,12 @@ pip install djangorestframework
 
 pip install httpie
 
+pip install drf-jwt
+
 --frontend
 yarn add axios
 yarn add react-router-dom
 yarn add antd
+yarn add use-reducer-with-side-effects
+
 
