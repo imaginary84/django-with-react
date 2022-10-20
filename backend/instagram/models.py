@@ -14,7 +14,7 @@ class TimestampedModel(models.Model):
 
 
 class Post(TimestampedModel):
-    autor = models.ForeignKey(
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="my_post_set", on_delete=models.CASCADE
     )
     photo = models.ImageField(upload_to="instagram/post/%Y/%m/%d")

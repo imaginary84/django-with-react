@@ -151,10 +151,10 @@ REST_FRAMEWORK = {
 
 import datetime
 
-JWT_AUTH = {
-    "JWT_SECRET_KEY": SECRET_KEY,
-    "JWT_ALGORITHM": "HS256",
-    "JWT_ALLOW_REFRESH": True,
-    "JWT_EXPIRATION_DELTA": datetime.timedelta(days=7),
-    "JWT_REFRESH_EXPIRATION_DELTA": datetime.timedelta(days=28),
+SIMPLE_JWT = {
+    "SIGNING_KEY": SECRET_KEY,
+    "ALGORITHM": "HS256",
+    "ROTATE_REFRESH_TOKENS": True,
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=28),
 }

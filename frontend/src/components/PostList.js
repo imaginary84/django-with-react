@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import Post from "./Post";
 import { useAppContext } from "appStore";
+import { Alert } from "antd";
 
 const apiUrl = "http://localhost:8000/api/posts/";
 
 function PostList() {
-  const { store } = useAppContext();
+  const {
+    store: {
+      jwtToken: { access },
+    },
+    dispatch,
+  } = useAppContext();
 
   // console.log(store);
 
@@ -15,8 +21,8 @@ function PostList() {
   useEffect(() => {
     console.log("Mounted");
     // debugger;
-
-    Axios.get(apiUrl)
+    const headers = { Authorization: `Bearer ${access}` };
+    Axios.get(apiUrl, { headers })
       .then((response) => {
         console.log("loaded response", response);
         const { data } = response;
