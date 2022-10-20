@@ -16,21 +16,19 @@ function Login() {
     async function fn() {
       const { username, password } = values;
 
-      const data = { username, password };
+      const logindata = { username, password };
 
       setFieldErrors({});
 
       try {
         const response = await Axios.post(
           "http://localhost:8000/accounts/token/",
-          data
+          logindata
         );
 
-        const {
-          data: { token: jwtToken },
-        } = response;
+        const { data } = response;
 
-        dispatch(setToken(jwtToken));
+        dispatch(setToken(data));
 
         notification.open({
           message: "로그인 성공",

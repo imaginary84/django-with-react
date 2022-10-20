@@ -6,9 +6,11 @@ import "./AppLayout.scss";
 import { Input, Menu } from "antd";
 
 import LogoImage from "assets/logo.png";
+import { useAppContext, deleteToken } from "appStore";
 
 function Root(props) {
   const { children } = props;
+  const { dispatch } = useAppContext();
   return (
     <div className="app ">
       <div className="header">
@@ -31,6 +33,9 @@ function Root(props) {
               //   children: [{ label: "item 3", key: "item-3" }],
               // },
             ]}
+            onClick={() => {
+              dispatch(deleteToken());
+            }}
           ></Menu>
         </div>
       </div>

@@ -29,7 +29,11 @@ export const AppProvider = ({ children }) => {
   const jwtToken = getStorageItem("jwtToken", "");
   const [store, dispatch] = useReducerWithSideEffects(reducer, {
     jwtToken,
-    isAuthenticated: jwtToken.length > 0 ? true : false,
+    isAuthenticated: jwtToken.access
+      ? jwtToken.access.length > 0
+        ? true
+        : false
+      : false,
   });
 
   return (
