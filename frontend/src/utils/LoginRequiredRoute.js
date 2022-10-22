@@ -11,12 +11,6 @@ export default function LoginRequiredRoute(props) {
     store: { isAuthenticated },
   } = useAppContext();
 
-  if (isAuthenticated) {
-    console.log("로그인 상태");
-  } else {
-    console.log("로그아웃상태");
-  }
-
   return isAuthenticated ? (
     children
   ) : (

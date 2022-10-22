@@ -3,7 +3,7 @@ import Axios from "axios";
 import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAppContext, setToken, deleteToken } from "appStore";
+import { useAppContext, setToken } from "appStore";
 
 function Login() {
   const { dispatch } = useAppContext();
@@ -119,7 +119,7 @@ function Login() {
           }}
         >
           <Button type="primary" htmlType="submit">
-            회원가입
+            로그인
           </Button>
         </Form.Item>
       </Form>

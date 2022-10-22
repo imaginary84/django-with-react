@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Axios from "axios";
 
-import { Form, Input, Button, notification } from "antd";
+import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 
 import { useNavigate } from "react-router-dom";
@@ -92,7 +92,7 @@ export default function Signup() {
   };
 
   return (
-    <div>
+    <Card title="회원가입">
       <Form
         labelCol={{
           span: 8,
@@ -149,6 +149,6 @@ export default function Signup() {
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </Card>
   );
 }

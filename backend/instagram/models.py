@@ -1,8 +1,11 @@
-from enum import unique
 import re
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+
+# from django.contrib.auth import get_user_model
+# from django_pydenticon.views import image as django_pydenticon
+# from django.shortcuts import resolve_url
 
 
 class TimestampedModel(models.Model):
@@ -43,6 +46,14 @@ class Post(TimestampedModel):
 
     def is_like_user(self, user):
         return self.like_user_set.filter(pk=user.pk).exists()
+
+    # @property
+    # def author_username(self):
+    #     return get_user_model().objects.get(pk=self.author.pk).username
+
+    # @property
+    # def author_avatar(self):
+    #     return resolve_url(django_pydenticon, self.author.username)
 
     class Meta:
         ordering = ["-id"]

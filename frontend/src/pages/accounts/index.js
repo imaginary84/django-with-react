@@ -19,7 +19,7 @@ function AccountRoutes() {
         }
       />
       <Route path={"signup.react"} element={<SignupReact />} />
-      <Route path={"signup.antd"} element={<SignupAntd />} />
+      <Route path={"signup"} element={<SignupAntd />} />
       <Route path="/*" element={<div>존재하지않는 페이지입니다.</div>} />
     </Routes>
   );

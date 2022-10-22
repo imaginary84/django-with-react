@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third apps
     "corsheaders",
+    "django_pydenticon",
     "rest_framework",
     "rest_framework_simplejwt",
     # local apps
@@ -143,8 +144,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        # "rest_framework.authentication.SessionAuthentication",
-        # "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
     ],
 }
 
@@ -156,6 +157,6 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "ROTATE_REFRESH_TOKENS": True,
     # "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=7),
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(seconds=10),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=28),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=5),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(weeks=1),
 }

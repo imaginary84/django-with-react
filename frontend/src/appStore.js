@@ -8,16 +8,26 @@ import useReducerWithSideEffects, {
 
 const reducer = (prev, action) => {
   // TODO:
-  const { type, payload: jwtToken } = action;
+  const {
+    type,
+    payload: { access, refresh },
+  } = action;
   if (type === SET_TOKEN) {
-    const newState = { ...prev, jwtToken, isAuthenticated: true };
+    const newState = { ...prev, access, refresh, isAuthenticated: true };
     return UpdateWithSideEffect(newState, (state, dispatch) => {
-      setStorageItem("jwtToken", jwtToken);
+      access && setStorageItem("access", access);
+      refresh && setStorageItem("refresh", refresh);
     });
   } else if (type === DELETE_TOKEN) {
-    const newState = { ...prev, jwtToken: "", isAuthenticated: false };
+    const newState = {
+      ...prev,
+      access: "",
+      refresh: "",
+      isAuthenticated: false,
+    };
     return UpdateWithSideEffect(newState, (state, dispatch) => {
-      setStorageItem("jwtToken", "");
+      setStorageItem("access", "");
+      setStorageItem("refresh", "");
     });
   }
   return prev;
@@ -26,14 +36,13 @@ const reducer = (prev, action) => {
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const jwtToken = getStorageItem("jwtToken", "");
+  const access = getStorageItem("access", ""); //로컬저장소에 있으면 가져오고 없으면 두번째 인자를 세팅.
+  const refresh = getStorageItem("refresh", "");
+
   const [store, dispatch] = useReducerWithSideEffects(reducer, {
-    jwtToken,
-    isAuthenticated: jwtToken.access
-      ? jwtToken.access.length > 0
-        ? true
-        : false
-      : false,
+    access,
+    refresh,
+    isAuthenticated: access.length > 0 && refresh.length > 0 ? true : false,
   });
 
   return (
@@ -51,4 +60,4 @@ const DELETE_TOKEN = "APP/DELETE_TOKEN";
 
 // Action Creators
 export const setToken = (token) => ({ type: SET_TOKEN, payload: token });
-export const deleteToken = () => ({ type: DELETE_TOKEN });
+export const deleteToken = () => ({ type: DELETE_TOKEN, payload: {} });

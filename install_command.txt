@@ -32,6 +32,7 @@ pip install httpie
 
 pip install drf-jwt
 
+pip install django-pydenticon
 --frontend
 yarn add axios
 yarn add react-router-dom
