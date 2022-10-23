@@ -157,6 +157,6 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "ROTATE_REFRESH_TOKENS": True,
     # "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=7),
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=5),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(weeks=1),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(hours=6),
 }

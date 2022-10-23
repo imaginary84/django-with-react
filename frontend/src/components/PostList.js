@@ -12,8 +12,9 @@ function PostList() {
   return (
     <div>
       {loading && <div>Loading...</div>}
-      {error && <div>Error 발생!!!</div>}
-      {!error && postList.map((post) => <Post key={post.id} post={post} />)}
+      {error.flag && <div>Error 발생!!!</div>}
+      {!error.flag &&
+        postList.map((post) => <Post key={post.id} post={post} />)}
     </div>
   );
 }

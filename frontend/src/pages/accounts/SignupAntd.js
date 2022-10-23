@@ -7,9 +7,11 @@ import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 
 import { useNavigate } from "react-router-dom";
 
+import { parseErrorMessages } from "utils/form";
+
 const apiUrl = "http://localhost:8000/accounts/signup/";
 
-const openNotification = () => {};
+// const openNotification = () => {};
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -53,33 +55,7 @@ export default function Signup() {
           });
 
           const { data: fieldsErrorMessages } = error.response;
-          // fieldsErrorMessages  -> {username : ["message", "message2"], password: ["message", "message2"]}
-
-          // const result = {};
-          // for (let key in fieldsErrorMessages) {
-          //   debugger;
-          //   result[key] = {
-          //     validateStatue: "error",
-          //     help: fieldsErrorMessages[key].join(" "),
-          //   };
-          // }
-          // console.log(result);
-          // setFieldErrors(result);
-
-          // 바로위 로직을 다른 문법으로 작성한 것.
-          setFieldErrors(
-            Object.entries(fieldsErrorMessages).reduce(
-              (acc, [fieldName, errors]) => {
-                // errors -> ["message", "message2"]
-                acc[fieldName] = {
-                  validateStatus: "error",
-                  help: errors.join(" "),
-                };
-                return acc;
-              },
-              {}
-            )
-          );
+          setFieldErrors(parseErrorMessages(fieldsErrorMessages));
         }
       }
     }

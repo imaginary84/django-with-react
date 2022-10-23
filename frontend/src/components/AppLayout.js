@@ -1,6 +1,4 @@
 import React from "react";
-import StoryList from "./StoryList";
-import SuggestionList from "./SuggestionList";
 
 import "./AppLayout.scss";
 import { Input, Menu } from "antd";
@@ -8,8 +6,8 @@ import { Input, Menu } from "antd";
 import LogoImage from "assets/logo.png";
 import { useAppContext, deleteToken } from "appStore";
 
-function Root(props) {
-  const { children } = props;
+function Root({ children, sidebar }) {
+  // const= props;
   const { dispatch } = useAppContext();
   return (
     <div className="app ">
@@ -41,11 +39,7 @@ function Root(props) {
       </div>
 
       <div className="contents">{children}</div>
-
-      <div className="sidebar">
-        <StoryList style={{ marginBottom: "1rem" }} />
-        <SuggestionList style={{ marginBottom: "1rem" }} />
-      </div>
+      <div className="sidebar">{sidebar}</div>
 
       <div className="footer">&copy; 2022. imaginary84.</div>
     </div>

@@ -4,6 +4,7 @@ import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAppContext, setToken } from "appStore";
+import { parseErrorMessages } from "utils/form";
 
 function Login() {
   const { dispatch } = useAppContext();
@@ -40,23 +41,12 @@ function Login() {
         if (error.response) {
           notification.open({
             message: "로그인 실패",
-            description: "아이디/암호를 확인해 주세요.",
+            description: `아이디/암호를 확인해 주세요.`,
             icon: <FrownOutlined style={{ color: "#ff3333" }} />,
           });
-          const { data: fieldsErrorMessages } = error.response;
 
-          setFieldErrors(
-            Object.entries(fieldsErrorMessages).reduce(
-              (acc, [fieldName, errors]) => {
-                acc[fieldName] = {
-                  validateStatus: "error",
-                  help: errors.join(" "),
-                };
-                return acc;
-              },
-              {}
-            )
-          );
+          const { data: fieldsErrorMessages } = error.response;
+          setFieldErrors(parseErrorMessages(fieldsErrorMessages));
         }
       }
     }
@@ -92,7 +82,7 @@ function Login() {
           ]}
           hasFeedback
           {...fieldErrors.username} //validatestatue="" help=""
-          {...fieldErrors.non_field_errors}
+          {...fieldErrors.detail}
         >
           <Input />
         </Form.Item>

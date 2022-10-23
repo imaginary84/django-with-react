@@ -40,15 +40,14 @@ export default function SuggestionList({ style }) {
     });
 
     executeFollow({ following_user: username });
-    // const [output, loading, error] = useAuthAxios({});
   };
 
   return (
     <div style={style}>
       <Card size="small" title="Suggestions for you">
         {loading && <div>Loading...</div>}
-        {error && <div>Error 발생!!!</div>}
-        {!error &&
+        {error.flag && <div>Error 발생!!!</div>}
+        {!error.flag &&
           userList.map((value, index) => {
             return (
               <Suggestion
