@@ -6,7 +6,7 @@ import "./index.css";
 import Root from "pages";
 import App from "App";
 
-import { AppProvider } from "appStore";
+import { AppProvider } from "store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

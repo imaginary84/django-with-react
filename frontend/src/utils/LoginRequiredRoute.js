@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAppContext } from "appStore";
+import { useAppContext } from "store";
 
 export default function LoginRequiredRoute(props) {
   const location = useLocation();

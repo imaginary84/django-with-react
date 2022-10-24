@@ -2,18 +2,18 @@ from datetime import timedelta
 from re import S
 
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
+from requests import RequestException
 from rest_framework import permissions
 
 # from rest_framework.settings
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Post
 from .serializers import PostSerializer
-
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.settings import api_settings
 
 
 class PostViewSet(ModelViewSet):
@@ -32,19 +32,22 @@ class PostViewSet(ModelViewSet):
         # qs = qs.filter(created_at__gte=timezone.now() - timedelta(days=3))
         return qs
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
+
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-        return super().perform_create(serializer)
 
-    def create(self, request, *args, **kwargs):
-        print("request.data : ", request.data)
-        print("request.FILES : ", request.FILES)
-        print("request.POST : ", request.POST)
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
-        # return super().create(request, *args, **kwargs)
+    @action(detail=True, methods=["POST"])
+    def like(self, request, pk):
+        post = self.get_object()
+        post.like_user_set.add(self.request.user)
+        return Response(status=status.HTTP_201_CREATED)
+
+    @like.mapping.delete
+    def un_like(self, request, pk):
+        post = self.get_object()
+        post.like_user_set.remove(self.request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)

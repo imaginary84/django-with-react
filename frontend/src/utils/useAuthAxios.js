@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Axios from "axios";
-import { deleteToken, setToken, useAppContext } from "appStore";
+import { deleteToken, setToken, useAppContext } from "store";
 
 export default function useAuthAxios({ method, url, data = null, memo }) {
   const {

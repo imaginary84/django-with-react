@@ -4,7 +4,7 @@ import "./AppLayout.scss";
 import { Input, Menu } from "antd";
 
 import LogoImage from "assets/logo.png";
-import { useAppContext, deleteToken } from "appStore";
+import { useAppContext, deleteToken } from "store";
 
 function Root({ children, sidebar }) {
   // const= props;

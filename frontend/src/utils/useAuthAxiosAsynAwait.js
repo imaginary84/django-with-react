@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import { deleteToken, setToken, useAppContext } from "appStore";
+import { deleteToken, setToken, useAppContext } from "store";
 import { parseErrorMessages } from "utils/form";
 
 /**
@@ -30,12 +30,12 @@ export default function useAuthAxios({ method, url, data = null, memo }) {
     headers: { Authorization: `Bearer ${access}` },
   });
 
-  async function request(input) {
+  async function request(input, paramUrl = "") {
     setLoading(true);
     try {
       const firstResponse = await firstAxios({
         method,
-        url,
+        url: url ? url : paramUrl,
         data: input ? input : {},
       });
       setOutput(firstResponse.data);
@@ -43,6 +43,7 @@ export default function useAuthAxios({ method, url, data = null, memo }) {
       setLoading(false);
       console.log("useAuthAxios firstResponse", firstResponse, memo);
     } catch (firstError) {
+      console.log("useAuthAxios firstError-1", firstError, memo);
       const { data, config: firstRequest, status } = firstError.response;
       // debugger;
 
@@ -94,7 +95,7 @@ export default function useAuthAxios({ method, url, data = null, memo }) {
             content: parseErrorMessages(data),
           });
           setLoading(false);
-          console.log("useAuthAxios firstError", firstError, memo);
+          console.log("useAuthAxios firstError-2", firstError, memo);
           // return Promise.reject();
         }
       } else {

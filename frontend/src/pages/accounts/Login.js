@@ -3,7 +3,7 @@ import Axios from "axios";
 import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAppContext, setToken } from "appStore";
+import { useAppContext, setToken } from "store";
 import { parseErrorMessages } from "utils/form";
 
 function Login() {
@@ -11,17 +11,16 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [fieldErrors, setFieldErrors] = useState({});
-  const { from: loginRedirectUrl } = location.state || { from: "/" }; //
+  const { from: loginRedirectUrl } = location.state || { from: "/" }; //LoginRequiredRoute에서 로그인 안되어있을대 useNavigate 또는 <Navigate />로 state 지정 가능. // 비로그인상태에서 로그인필요페이지 접근시 로그인페이지로 유도후에 로그인후 자동으로 이동할곳을 지정하고자함.
 
   const onFinish = (values) => {
     async function fn() {
-      const { username, password } = values;
-
-      const logindata = { username, password };
-
-      setFieldErrors({});
-
       try {
+        const { username, password } = values;
+        const logindata = { username, password };
+
+        setFieldErrors({});
+
         const response = await Axios.post(
           "http://localhost:8000/accounts/token/",
           logindata

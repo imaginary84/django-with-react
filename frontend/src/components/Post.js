@@ -1,14 +1,14 @@
 import React from "react";
 import { Avatar, Card } from "antd";
-import { HeartOutlined, HeartFilled, UserOutlined } from "@ant-design/icons";
+import { HeartOutlined, HeartTwoTone } from "@ant-design/icons";
 
-const Post = ({ post }) => {
+const Post = ({ post, handleLike }) => {
   const {
     photo,
     caption,
     location,
     tag_set,
-    like_user_set,
+    is_like,
     author: { id, name, username, avatar_url },
   } = post;
 
@@ -16,7 +16,20 @@ const Post = ({ post }) => {
     <Card
       hoverable
       cover={<img src={photo} alt={caption} />}
-      actions={[<HeartOutlined key="like" />, <HeartFilled key="unlike" />]}
+      actions={[
+        is_like ? (
+          <HeartTwoTone
+            twoToneColor={"#eb2f96"}
+            key="unlike"
+            onClick={() => handleLike({ post, is_like: false })}
+          />
+        ) : (
+          <HeartOutlined
+            key="like"
+            onClick={() => handleLike({ post, is_like: true })}
+          />
+        ),
+      ]} //, ]}
       // title={author_username}
       style={{ marginBottom: "20px" }}
     >

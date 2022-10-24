@@ -9,9 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 import { parseErrorMessages } from "utils/form";
 
-const apiUrl = "http://localhost:8000/accounts/signup/";
-
-// const openNotification = () => {};
+const apiUrl = "";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -20,24 +18,18 @@ export default function Signup() {
 
   //입력값 rule을 다 통과하면 실행되는 함수.
   const onFinish = (values) => {
-    // Axios.post(apiUrl, data)
-    //   .then((response) => console.log(response))
-    //   .catch((error) => console.log(error))
-    //   .finally(() => {
-    //     console.log("Axios post Ended");
-    //   });
-
     async function fn() {
-      const { username, password } = values;
-
-      console.log(username, password);
-
-      const data = { username, password };
-
-      setFieldErrors({});
-
       try {
-        await Axios.post(apiUrl, data);
+        const { username, password } = values;
+
+        const data = { username, password };
+
+        setFieldErrors({});
+
+        const response = await Axios.post(
+          "http://localhost:8000/accounts/signup/",
+          data
+        );
 
         notification.open({
           message: "회원가입 성공",
@@ -55,7 +47,13 @@ export default function Signup() {
           });
 
           const { data: fieldsErrorMessages } = error.response;
+          console.log(fieldsErrorMessages);
           setFieldErrors(parseErrorMessages(fieldsErrorMessages));
+
+          //중복된 아이디로 회원가입 시도시.
+          // fieldsErrorMessages는 {username: ['해당 사용자 이름은 이미 존재합니다.']} 이런 값이 있음.
+          // antd의 Form.Item에서 에러 표현을 위해서는  { username: {validateStatus: "error", help: "해당 사용자 이름은 이미 존재합니다."}} 이런 형태로 바꿔줘야함.
+          // 그래서 쉽게 변환 하기위해 parseErrorMessages를 만듬. 만들어서 setFieldErrors 해주면 끝.
         }
       }
     }
