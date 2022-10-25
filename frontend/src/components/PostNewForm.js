@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Form, Input, Modal, Upload, notification } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { getBase64FromFile } from "utils/Base64";
-import useAuthAxios from "utils/useAuthAxiosAsynAwait";
 import { useNavigate } from "react-router-dom";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
+import Axios from "axios";
+import { useAppContext } from "appStore";
+import { parseErrorMessages } from "utils/form";
 
 export default function PostNewForm() {
   const [fieldErrors, setFieldErrors] = useState({});
@@ -13,6 +15,10 @@ export default function PostNewForm() {
     visible: false,
     base64: null,
   });
+  const {
+    store: { access, refresh },
+    dispatch,
+  } = useAppContext();
   const navigate = useNavigate();
 
   const handleUploadChange = ({ fileList }) => {
@@ -26,18 +32,12 @@ export default function PostNewForm() {
     setPreviewPhoto({ visible: true, base64: file.url || file.preview });
   };
 
-  const [, loading, error, posting] = useAuthAxios({
-    method: "post",
-    url: "http://localhost:8000/api/posts/",
-    memo: "포스팅 작성",
-  });
-
-  const handleFinish = async (e) => {
+  const handleFinish = async (fieldValues) => {
     const {
       photo: { fileList },
       caption,
       location,
-    } = e;
+    } = fieldValues;
 
     const formData = new FormData();
     formData.append("caption", caption);
@@ -46,27 +46,47 @@ export default function PostNewForm() {
       formData.append("photo", file.originFileObj);
     });
 
-    // try {
-    await posting(formData);
-    //
-    // } catch (e) {}
+    const headers = { Authorization: `Bearer ${access}` };
+    try {
+      const response = await Axios.post(
+        "http://localhost:8000/api/posts/",
+        formData,
+        { headers }
+      );
+      console.log("success response :", response);
+      navigate("/");
+    } catch (error) {
+      if (error.response) {
+        const { status, data: fieldsErrorMessages } = error.response;
+        // setFieldErrors(parseErrorMessages(fieldsErrorMessages));
+        if (typeof fieldsErrorMessages === "string") {
+          console.error(`HTTP-${status} 응답을 받았습니다.`);
 
-    // console.log("HJS", error);
+          notification.open({
+            message: "서버 오류",
+            description: `HTTP-${status} 응답을 받았습니다. 서버 에러를 확인해 주세요.`,
+            icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+          });
+        } else {
+          setFieldErrors(parseErrorMessages(fieldsErrorMessages));
+        }
+      }
+    }
   };
 
-  useEffect(() => {
-    // debugger;
-    if (error.status && !error.flag) {
-      navigate("/");
-    } else if (error.flag) {
-      // && error.status === 500) {
-      notification.open({
-        message: "서버 오류",
-        description: `HTTP ${error.status} 응답을 받았습니다. 서버 에러를 확인해주세요.`,
-        icon: <FrownOutlined style={{ color: "#ff3333" }} />,
-      });
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   // debugger;
+  //   if (error.status && !error.flag) {
+  //     navigate("/");
+  //   } else if (error.flag) {
+  //     // && error.status === 500) {
+  //     notification.open({
+  //       message: "서버 오류",
+  //       description: `HTTP ${error.status} 응답을 받았습니다. 서버 에러를 확인해주세요.`,
+  //       icon: <FrownOutlined style={{ color: "#ff3333" }} />,
+  //     });
+  //   }
+  // }, [error]);
 
   return (
     <Form
@@ -153,7 +173,7 @@ export default function PostNewForm() {
         />
       </Modal>
       <hr />
-      {JSON.stringify(error)}
+      {/* {JSON.stringify(error)} */}
       {/* {JSON.stringify(fileList)}
       {JSON.stringify(previewPhoto)}
       {error.flag && JSON.stringify(error.content)} */}

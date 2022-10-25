@@ -3,7 +3,7 @@ import Axios from "axios";
 import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAppContext, setToken } from "store";
+import { useAppContext, setToken } from "appStore";
 import { parseErrorMessages } from "utils/form";
 
 function Login() {

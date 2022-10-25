@@ -1,57 +1,92 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Post from "./Post";
-import useAuthAxios from "utils/useAuthAxiosAsynAwait";
-import { useNavigate } from "react-router-dom";
+import Axios from "axios";
+import { useAppContext, addFunc } from "appStore";
+import { useFetch } from "utils/useFetch";
 
 function PostList() {
-  const navigate = useNavigate();
-  const [postList, loading, error, refetch] = useAuthAxios({
-    method: "get",
+  const { store, dispatch } = useAppContext();
+  const { access, refresh } = store;
+  const headers = useMemo(() => ({ Authorization: `Bearer ${access}` }), []);
+
+  const [originPostList, loading, error, fetchPostList] = useFetch({
+    headers,
+    method: "GET",
     url: "http://localhost:8000/api/posts/",
-    memo: "포스트 리스트 조회",
   });
 
-  const [, , likeError, like] = useAuthAxios({
-    method: "post",
-    memo: "like 처리",
-  });
+  useEffect(() => {
+    fetchPostList();
+    dispatch(addFunc("fetchPostList", fetchPostList));
+  }, []);
 
-  const [, , unlikeError, unlike] = useAuthAxios({
-    method: "delete",
-    memo: "unlike 처리",
-  });
+  /*
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [postList, setPostList] = useState([]);
+
+  useEffect(() => {
+    const postList = async () => {
+      try {
+        setLoading(true);
+
+        const response = await Axios({
+          method: "GET",
+          url: "http://localhost:8000/api/posts/",
+          headers,
+        });
+        setLoading(false);
+        setPostList(response.data);
+      } catch (error) {
+        setError(true);
+        setLoading(false);
+      }
+    };
+    postList();
+  }, [headers]);
+  */
 
   const handleLike = async ({ post, is_like }) => {
-    // console.log(post, is_like);
-    if (is_like) {
-      await like(null, `http://localhost:8000/api/posts/${post.id}/like/`);
+    try {
+      if (is_like)
+        await Axios({
+          method: "POST",
+          url: `http://localhost:8000/api/posts/${post.id}/like/`,
+          headers,
+        });
+      else
+        await Axios({
+          method: "DELETE",
+          url: `http://localhost:8000/api/posts/${post.id}/like/`,
+          headers,
+        });
 
-      // navigate("/");
-      // refetch();
-    } else {
-      await unlike(null, `http://localhost:8000/api/posts/${post.id}/like/`);
-
-      navigate("/");
+      setPostList((prevPostList) =>
+        prevPostList.map((prevPost) => {
+          if (prevPost.id === post.id) {
+            prevPost.is_like = !prevPost.is_like;
+          }
+          return prevPost;
+        })
+      );
+    } catch (error) {
+      console.log("error", error);
+      if (error.response) {
+      }
     }
   };
 
-  // useEffect(() => {
-  //   console.log(likeError, unlikeError);
-  //   // debugger;
-  //   if (
-  //     (likeError.status && !likeError.flag) ||
-  //     (unlikeError.status && !unlikeError.flag)
-  //   ) {
-  //     // navigate("/");
-  //   } else if (likeError.flagn || unlikeError.flag) {
-  //   }
-  // }, [likeError, unlikeError]);
+  const [postList, setPostList] = useState([]);
+
+  useEffect(() => {
+    setPostList([...originPostList]);
+  }, [originPostList]);
 
   return (
     <div>
       {loading && <div>Loading...</div>}
-      {error.flag && <div>Error 발생!!!</div>}
-      {!error.flag &&
+      {error && <div>로딩 중 에러가 발생했습니다.</div>}
+      {postList &&
         postList.map((post) => (
           <Post key={post.id} post={post} handleLike={handleLike} />
         ))}

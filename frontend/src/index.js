@@ -5,8 +5,29 @@ import "antd/dist/antd.min.css";
 import "./index.css";
 import Root from "pages";
 import App from "App";
+import Axios from "axios";
 
-import { AppProvider } from "store";
+import { AppProvider } from "appStore";
+
+Axios.interceptors.request.use(
+  (request) => {
+    // Edit request config
+    return request;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+Axios.interceptors.response.use(
+  (response) => {
+    // Edit response config
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

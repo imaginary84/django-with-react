@@ -8,12 +8,15 @@ import useReducerWithSideEffects, {
 
 const reducer = (prev, action) => {
   // TODO:
-  const {
-    type,
-    payload: { access, refresh },
-  } = action;
+  const { type, payload } = action;
+  const { access, refresh, name, fn } = payload;
   if (type === SET_TOKEN) {
-    const newState = { ...prev, access, refresh, isAuthenticated: true };
+    const newState = {
+      ...prev,
+      access,
+      refresh,
+      isAuthenticated: true,
+    };
     return UpdateWithSideEffect(newState, (state, dispatch) => {
       access && setStorageItem("access", access);
       refresh && setStorageItem("refresh", refresh);
@@ -29,6 +32,12 @@ const reducer = (prev, action) => {
       setStorageItem("access", "");
       setStorageItem("refresh", "");
     });
+  } else if (type === ADD_FUNC) {
+    const newState = {
+      ...prev,
+      funcList: { ...prev.funcList, [name]: fn },
+    };
+    return Update(newState);
   }
   return prev;
 };
@@ -43,6 +52,7 @@ export const AppProvider = ({ children }) => {
     access,
     refresh,
     isAuthenticated: access.length > 0 && refresh.length > 0 ? true : false,
+    funcList: {},
   });
 
   return (
@@ -57,7 +67,12 @@ export const useAppContext = () => useContext(AppContext);
 //Actions
 const SET_TOKEN = "APP/SET_TOKEN";
 const DELETE_TOKEN = "APP/DELETE_TOKEN";
+const ADD_FUNC = "APP/ADD_FUNC";
 
 // Action Creators
 export const setToken = (token) => ({ type: SET_TOKEN, payload: token });
 export const deleteToken = () => ({ type: DELETE_TOKEN, payload: {} });
+export const addFunc = (name, fn) => ({
+  type: ADD_FUNC,
+  payload: { name, fn },
+});
