@@ -1,6 +1,7 @@
+# from xml.etree.ElementTree import Comment
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Post
+from .models import Post, Comment
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -33,3 +34,12 @@ class PostSerializer(serializers.ModelSerializer):
             "tag_set",
             "is_like",
         ]
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
+    # post = PostSerializer(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ["id", "message", "author", "created_at"]

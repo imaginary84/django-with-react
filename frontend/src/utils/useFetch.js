@@ -27,6 +27,7 @@ export const useFetch = ({ method, url, headers, data, params, funcName }) => {
       setLoading(false);
       setDataList(response.data);
     } catch (error) {
+      console.log("useFetch error -", error);
       setError(true);
       setLoading(false);
     }

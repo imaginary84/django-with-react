@@ -20,53 +20,45 @@ function PostList() {
     dispatch(addFunc("fetchPostList", fetchPostList));
   }, []);
 
-  /*
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [postList, setPostList] = useState([]);
+  // const [error, setError] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  // const [originPostList, setOriginPostList] = useState([]);
 
-  useEffect(() => {
-    const postList = async () => {
-      try {
-        setLoading(true);
+  // useEffect(() => {
+  //   const postList = async () => {
+  //     try {
+  //       setLoading(true);
 
-        const response = await Axios({
-          method: "GET",
-          url: "http://localhost:8000/api/posts/",
-          headers,
-        });
-        setLoading(false);
-        setPostList(response.data);
-      } catch (error) {
-        setError(true);
-        setLoading(false);
-      }
-    };
-    postList();
-  }, [headers]);
-  */
+  //       const response = await Axios({
+  //         method: "GET",
+  //         url: "http://localhost:8000/api/posts/",
+  //         headers,
+  //       });
+  //       setLoading(false);
+  //       setPostList(response.data);
+  //     } catch (error) {
+  //       setError(true);
+  //       setLoading(false);
+  //     }
+  //   };
+  //   postList();
+  // }, [headers]);
 
   const handleLike = async ({ post, is_like }) => {
     try {
-      if (is_like)
-        await Axios({
-          method: "POST",
-          url: `http://localhost:8000/api/posts/${post.id}/like/`,
-          headers,
-        });
-      else
-        await Axios({
-          method: "DELETE",
-          url: `http://localhost:8000/api/posts/${post.id}/like/`,
-          headers,
-        });
+      await Axios({
+        method: is_like ? "POST" : "DELETE",
+        url: `http://localhost:8000/api/posts/${post.id}/like/`,
+        headers,
+      });
 
       setPostList((prevPostList) =>
         prevPostList.map((prevPost) => {
-          if (prevPost.id === post.id) {
-            prevPost.is_like = !prevPost.is_like;
-          }
-          return prevPost;
+          // if (prevPost.id === post.id) {
+          //   prevPost.is_like = is_like;
+          // }
+          // return prevPost;
+          return prevPost.id === post.id ? { ...prevPost, is_like } : prevPost;
         })
       );
     } catch (error) {

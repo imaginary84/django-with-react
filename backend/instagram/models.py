@@ -65,7 +65,7 @@ class Comment(TimestampedModel):
     message = models.TextField()
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ["id"]
 
 
 class Tag(TimestampedModel):

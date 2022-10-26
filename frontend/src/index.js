@@ -4,14 +4,15 @@ import { BrowserRouter } from "react-router-dom";
 import "antd/dist/antd.min.css";
 import "./index.css";
 import Root from "pages";
-import App from "App";
 import Axios from "axios";
 
 import { AppProvider } from "appStore";
+import { getStorageItem, setStorageItem } from "utils/useLocalStorage";
+
+const authAxios = Axios.create();
 
 Axios.interceptors.request.use(
   (request) => {
-    // Edit request config
     return request;
   },
   (error) => {
@@ -20,11 +21,37 @@ Axios.interceptors.request.use(
 );
 
 Axios.interceptors.response.use(
-  (response) => {
-    // Edit response config
+  async (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
+    // if (error.response) {
+    //   const { config: originConfig, status } = error.response;
+
+    //   if (status === 401) {
+    //     // 엑세스 토큰으로 인증이 거부됨.
+    //     try {
+    //       const refreshToken = getStorageItem("refresh", "");
+    //       const res = await authAxios({
+    //         method: "POST",
+    //         url: "http://localhost:8000/accounts/token/refresh/",
+    //         data: { refresh: refreshToken },
+    //       });
+
+    //       const { access, refresh } = res.data;
+    //       setStorageItem("access", access);
+    //       setStorageItem("refresh", refresh);
+
+    //       originConfig.headers = { Authorization: `Bearer ${access}` };
+
+    //       const res2 = await authAxios(originConfig);
+    //       return Promise.resolve(res2);
+    //     } catch (error) {
+    //       setStorageItem("access", "");
+    //       setStorageItem("refresh", "");
+    //     }
+    //   }
+    // }
     return Promise.reject(error);
   }
 );
@@ -34,7 +61,6 @@ root.render(
   <BrowserRouter>
     <AppProvider>
       <Root />
-      {/* <App /> */}
     </AppProvider>
   </BrowserRouter>
 );
