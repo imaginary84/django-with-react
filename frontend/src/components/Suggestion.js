@@ -12,21 +12,26 @@ export default function Suggestion(props) {
     <div className="suggestion">
       <div className="avatar">
         <Avatar
-          size={"small"}
+          size={"large"}
           icon={
             <img src={"http://localhost:8000" + avatar_url} alt={username} />
           }
+          className="cursor"
         />
       </div>
       <div className="username">
-        {name.length === 0 ? username : name} {/*isFollow ? "True" : "False"*/}
+        <div className="cursor">{name.length === 0 ? username : name}</div>{" "}
+        <span className="gray">회원님을 팔로우합니다.</span>
       </div>
       <div className="action">
         {isFollow && "팔로윙 중"}
         {!isFollow && (
-          <Button size="small" onClick={() => onFollowUser(username)}>
+          <span
+            className="follow cursor"
+            onClick={() => onFollowUser(username)}
+          >
             Follow
-          </Button>
+          </span>
         )}
       </div>
     </div>

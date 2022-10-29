@@ -13,8 +13,14 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from .models import Post, Comment
 from .serializers import CommentSerializer, PostSerializer
+
+
+class PostPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = "page_size"
 
 
 class PostViewSet(ModelViewSet):
@@ -24,6 +30,7 @@ class PostViewSet(ModelViewSet):
         .prefetch_related("tag_set", "like_user_set")
     )
     serializer_class = PostSerializer
+    pagination_class = PostPagination
     # permission_classes = [permissions.AllowAny]  # FIXME: 인증 적용
 
     def get_queryset(self):
@@ -33,10 +40,11 @@ class PostViewSet(ModelViewSet):
         # qs = qs.filter(created_at__gte=timezone.now() - timedelta(days=3))
         return qs
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context["request"] = self.request
-        return context
+    # drf 과거버전은 모르겠으나 현재는 자동으로 해줌.
+    # def get_serializer_context(self):
+    #     context = super().get_serializer_context()
+    #     context["request"] = self.request
+    #     return context
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -60,6 +68,7 @@ class CommentViewSet(ModelViewSet):
 
     def get_queryset(self):
         post_pk = self.kwargs["post_pk"]
+        print("self.kwargs", self.kwargs)
         qs = super().get_queryset()
         qs = qs.filter(post__id=post_pk)
         return qs

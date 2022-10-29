@@ -10,8 +10,22 @@
 
     }
     .username{
+        margin-left: 1em;
+        font-weight: bold;
     }
     .action{
         justify-self: right;
+    }
+
+    .gray{
+        color:#8e8e8e;
+    }
+
+    .follow{
+        color:#0095F6;
+    }
+
+    .cursor{
+        cursor: pointer;
     }
 }

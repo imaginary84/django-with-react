@@ -3,7 +3,7 @@ import { Card } from "antd";
 import Suggestion from "./Suggestion";
 import "./SuggestionList.scss";
 import Axios from "axios";
-import { useAppContext, addFunc } from "appStore";
+import { useAppContext } from "appStore";
 import { useFetch } from "utils/useFetch";
 
 export default function SuggestionList({ style }) {
@@ -11,40 +11,40 @@ export default function SuggestionList({ style }) {
   const { access, refresh } = store;
   const headers = useMemo(() => ({ Authorization: `Bearer ${access}` }), []);
 
-  const [originUserList, loading, error, fetchSuggestionList] = useFetch({
-    method: "GET",
-    url: "http://localhost:8000/accounts/suggestions/",
-    headers,
-  });
-
-  useEffect(() => {
-    fetchSuggestionList();
-    dispatch(addFunc("fetchSuggestionList", fetchSuggestionList));
-  }, []);
-
-  // const [error, setError] = useState(false);
-  // const [loading, setLoading] = useState(false);
-  // const [originUserList, setOriginUserList] = useState([]);
+  // const [originUserList, loading, error, fetchSuggestionList] = useFetch({
+  //   method: "GET",
+  //   url: "http://localhost:8000/accounts/suggestions/",
+  //   headers,
+  // });
 
   // useEffect(() => {
-  //   const postList = async () => {
-  //     try {
-  //       setLoading(true);
+  //   fetchSuggestionList();
+  // }, []);
 
-  //       const response = await Axios({
-  //         method: "GET",
-  //         url: "http://localhost:8000/accounts/suggestions/",
-  //         headers,
-  //       });
-  //       setLoading(false);
-  //       setOriginUserList(response.data);
-  //     } catch (error) {
-  //       setError(true);
-  //       setLoading(false);
-  //     }
-  //   };
-  //   postList();
-  // }, [headers]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [originUserList, setOriginUserList] = useState([]);
+
+  const postList = async () => {
+    try {
+      setLoading(true);
+
+      const response = await Axios({
+        method: "GET",
+        url: "http://localhost:8000/accounts/suggestions/",
+        headers,
+      });
+      setLoading(false);
+      setOriginUserList(response.data);
+    } catch (error) {
+      setError(true);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    postList();
+  }, [headers]);
 
   const [userList, setUserList] = useState([]);
 
@@ -94,23 +94,9 @@ export default function SuggestionList({ style }) {
 
   return (
     <div style={style}>
-      <button
-        onClick={() => {
-          store.funcList.fetchPostList();
-        }}
-      >
-        포스트 조회
-      </button>
-      <button
-        onClick={() => {
-          store.funcList.fetchSuggestionList();
-        }}
-      >
-        서제셜 조회
-      </button>
       {loading && <div>Loading...</div>}
       {error && <div>로딩 중 에러가 발생했습니다.</div>}
-      <Card size="small" title="Suggestions for you">
+      <Card size="small" title="회원님을 위한 추천">
         {userList.map((value, index) => {
           return (
             <Suggestion key={index} user={value} onFollowUser={onFollowUser} />

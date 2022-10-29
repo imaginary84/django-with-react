@@ -3,12 +3,23 @@ from django.shortcuts import render
 
 # from requests import Response
 
-from rest_framework.generics import CreateAPIView, ListAPIView, get_object_or_404
+from rest_framework.generics import (
+    CreateAPIView,
+    RetrieveAPIView,
+    ListAPIView,
+    get_object_or_404,
+    RetrieveUpdateDestroyAPIView,
+)
 from rest_framework import permissions, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from .serializers import SignupSerializer, SuggestionUserSerializer
+from .serializers import (
+    SignupSerializer,
+    ProfileSerializer,
+    UserSerializer,
+)
 
 
 class SignupView(CreateAPIView):
@@ -19,9 +30,14 @@ class SignupView(CreateAPIView):
     ]
 
 
+class ProfileView(RetrieveUpdateDestroyAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = ProfileSerializer
+
+
 class SuggestionListApiView(ListAPIView):
     queryset = get_user_model().objects.all()
-    serializer_class = SuggestionUserSerializer
+    serializer_class = UserSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()

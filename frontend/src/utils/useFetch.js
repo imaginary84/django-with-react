@@ -7,7 +7,15 @@ import { useAppContext, addFunc } from "appStore";
  * @param {object} {method, url, headers, data, params}
  * @returns [data, loading, error, fetchFunc]
  */
-export const useFetch = ({ method, url, headers, data, params, funcName }) => {
+export const useFetch = ({
+  method,
+  url,
+  headers,
+  data,
+  params,
+  funcName,
+  pagination = false,
+}) => {
   const { store, dispatch } = useAppContext();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,7 +33,7 @@ export const useFetch = ({ method, url, headers, data, params, funcName }) => {
         params,
       });
       setLoading(false);
-      setDataList(response.data);
+      setDataList(pagination ? response.data.results : response.data);
     } catch (error) {
       console.log("useFetch error -", error);
       setError(true);

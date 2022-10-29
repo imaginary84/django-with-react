@@ -156,7 +156,6 @@ SIMPLE_JWT = {
     "SIGNING_KEY": SECRET_KEY,
     "ALGORITHM": "HS256",
     "ROTATE_REFRESH_TOKENS": True,
-    # "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=7),
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=7),
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(weeks=4),
 }

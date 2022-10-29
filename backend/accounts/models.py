@@ -44,17 +44,3 @@ class User(AbstractUser):
             return self.avatar.url
         else:
             return resolve_url("pydenticon_image", self.username)
-
-    def send_welcome_email(self):
-        subject = render_to_string(
-            "accounts/welcom_email_subject.txt",
-            {
-                "user": self,
-            },
-        )
-        content = render_to_string(
-            "accounts/welcome_email_content.txt",
-            {
-                "user": self,
-            },
-        )
