@@ -1,55 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { Avatar, Button, Input, Tooltip } from "antd";
-import moment from "moment";
-import { useAppContext, addFunc } from "appStore";
-import { useFetch } from "utils/useFetch";
-import Axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+import { Button, Input } from "antd";
+import { useExecute, useFetch } from "utils/useFetch";
 import Comment from "./Comment";
 
 export default function CommentList({ post }) {
   const [commentContent, setCommentContent] = useState("");
   const [commentList, setCommentList] = useState([]);
+
   const {
-    store: { access },
-    dispatch,
-  } = useAppContext();
-
-  const headers = { Authorization: `Bearer ${access}` };
-
-  const [originCommentList, loading, error, fetchCommentList] = useFetch({
-    headers,
+    dataList: originCommentList,
+    loading,
+    error,
+  } = useFetch({
     method: "GET",
     url: `http://localhost:8000/api/posts/${post.id}/comments/`,
   });
 
   useEffect(() => {
-    fetchCommentList();
-    dispatch(addFunc("fetchPostList", fetchCommentList));
-  }, []);
-
-  useEffect(() => {
     setCommentList(originCommentList);
   }, [originCommentList]);
 
-  const handleClick = async () => {
+  const { execute: commentFunc } = useExecute({
+    method: "POST",
+    url: `http://localhost:8000/api/posts/${post.id}/comments/`,
+  });
+
+  const handleClick = useCallback(async () => {
     try {
-      const data = { message: commentContent };
-      const response = await Axios({
-        method: "POST",
-        url: `http://localhost:8000/api/posts/${post.id}/comments/`,
-        headers,
-        data,
-      });
+      const response = await commentFunc({ data: { message: commentContent } });
 
       setCommentList((prev) => [...prev, response.data]);
       setCommentContent("");
     } catch (error) {
       console.log("댓글쓰기 오류", error);
     }
-  };
+  }, [commentContent]);
 
   return (
     <div>
+      {loading && <div>Loading...</div>}
+      {error && <div>로딩 중 에러가 발생했습니다.</div>}
       {commentList &&
         commentList.map((comment) => {
           return <Comment key={comment.id} comment={comment} />;

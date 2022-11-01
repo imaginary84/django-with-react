@@ -1,0 +1,16 @@
+.post-list{
+
+    display:grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas: 
+        "post post post"
+    ;
+
+    max-width: 100%;
+
+    .post{
+        background-color: blanchedalmond;
+        height:300px;
+    }
+}

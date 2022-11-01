@@ -5,7 +5,6 @@ import "antd/dist/antd.min.css";
 import "./index.css";
 import Root from "pages";
 import Axios from "axios";
-import App from "App";
 
 import { AppProvider } from "appStore";
 import { getStorageItem, setStorageItem } from "utils/useLocalStorage";

@@ -1,6 +1,7 @@
+
 .suggestion{
     display : grid;
-    grid-template-columns: 32px 2fr 1fr;
+    grid-template-columns: 40px 2fr 1fr;
     align-items: center;
     margin-bottom: 0.5em;
 
@@ -11,7 +12,7 @@
     }
     .username{
         margin-left: 1em;
-        font-weight: bold;
+        
     }
     .action{
         justify-self: right;
@@ -27,5 +28,6 @@
 
     .cursor{
         cursor: pointer;
+        font-weight: bold;
     }
 }

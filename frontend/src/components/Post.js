@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { Avatar, Button, Card, Input } from "antd";
 import { HeartOutlined, HeartTwoTone } from "@ant-design/icons";
 import Axios from "axios";
-import { useAppContext, addFunc } from "appStore";
+import { useAppContext } from "appStore";
 import { useFetch } from "utils/useFetch";
 import CommentList from "./CommentList";
 
 const Post = ({ post, handleLike }) => {
   const {
+    id,
     photo,
     caption,
     location,
@@ -46,6 +47,21 @@ const Post = ({ post, handleLike }) => {
   return (
     <div>
       <Card
+        title={
+          <div>
+            <Avatar
+              size="default"
+              icon={
+                <img
+                  src={"http://localhost:8000" + avatar_url}
+                  alt={username}
+                />
+              }
+              style={{ marginRight: "15px" }}
+            />
+            {username}-{id}
+          </div>
+        }
         hoverable
         cover={<img src={photo} alt={caption} />}
         actions={[
@@ -65,22 +81,7 @@ const Post = ({ post, handleLike }) => {
         // title={author_username}
         style={{ marginBottom: "20px" }}
       >
-        <Card.Meta
-          avatar={
-            <Avatar
-              size="large"
-              icon={
-                <img
-                  src={"http://localhost:8000" + avatar_url}
-                  alt={username}
-                />
-              }
-            />
-          }
-          title={location}
-          description={caption}
-          style={{ marginBottom: "0.5em" }}
-        />
+        <Card.Meta description={caption} style={{ marginBottom: "0.5em" }} />
         <hr />
         <CommentList post={post} />
       </Card>

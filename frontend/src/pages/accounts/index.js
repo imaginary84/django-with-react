@@ -11,7 +11,7 @@ function AccountRoutes() {
     <Routes>
       <Route path={"login"} element={<Login />} />
       <Route
-        path={"profile"}
+        path={"profile/:username"}
         element={
           <LoginRequiredRoute>
             <Profile />

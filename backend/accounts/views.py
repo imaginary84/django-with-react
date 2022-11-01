@@ -1,7 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 
 # from requests import Response
+
 
 from rest_framework.generics import (
     CreateAPIView,
@@ -19,7 +22,12 @@ from .serializers import (
     SignupSerializer,
     ProfileSerializer,
     UserSerializer,
+    MyTokenObtainPairSerializer,
 )
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 
 class SignupView(CreateAPIView):
@@ -33,6 +41,13 @@ class SignupView(CreateAPIView):
 class ProfileView(RetrieveUpdateDestroyAPIView):
     queryset = get_user_model().objects.all()
     serializer_class = ProfileSerializer
+
+    def get_object(self):
+        if self.kwargs.get("username") == "my":
+            return get_user_model().objects.get(id=self.request.user.id)
+        else:
+            # return super().get_object()
+            return get_user_model().objects.get(username=self.kwargs.get("username"))
 
 
 class SuggestionListApiView(ListAPIView):

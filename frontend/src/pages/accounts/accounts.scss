@@ -1,0 +1,62 @@
+.layout{
+    width:935px;
+    // max-width: 100%;
+    margin: 50px auto;
+}
+
+.login{
+    width:50%;
+    margin: 0 auto;
+}
+
+.profile-1{
+    display:flex;
+    margin-bottom: 3rem;
+
+    .profile-1-1{
+        width:30%;
+        text-align: center;
+        .avatar{
+            // border:solid 0.5px;
+            max-width: 150px;
+            max-height:150px;
+            border-radius: 50%;
+        }
+    }
+    
+    .profile-1-2{
+        width:70%;
+        .controll{
+            display:flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            .id{
+                font-size: 2rem;
+                margin-right: 1.5rem;
+            }
+            .edit-profile{
+                margin-right: 1.5rem;
+            }
+        }
+    
+        .postfollow{
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            .gap{
+                margin-right: 1rem;
+            }
+            .pointer{
+                cursor:pointer;
+            }
+        }
+
+        .name{
+            font-size: 1rem;
+        }
+    }
+}
+
+.my-posts{
+    border-top: 1px solid #c1c1c1;
+}

@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import "./AppLayout.scss";
 import { Input, Menu } from "antd";
 
 import LogoImage from "assets/logo.png";
 import { useAppContext, deleteToken } from "appStore";
+import { useNavigate } from "react-router-dom";
 
 function Root({ children, sidebar }) {
-  // const= props;
-  const { dispatch } = useAppContext();
+  const {
+    store: { username },
+    dispatch,
+  } = useAppContext();
+  const navigate = useNavigate();
+
   return (
     <div className="app ">
       <div className="header">
@@ -20,21 +25,24 @@ function Root({ children, sidebar }) {
         </div>
         <div className="topnav">
           <Menu
+            style={{ width: "270px" }}
             mode="horizontal"
+            // forceSubMenuRender={true}
             items={[
-              { label: "메뉴1", key: "menu-1" },
-              { label: "메뉴2", key: "menu-2" },
-              { label: "메뉴3", key: "menu-3" },
-              // {
-              //   label: "sub menu",
-              //   key: "sub-menu",
-              //   children: [{ label: "item 3", key: "item-3" }],
-              // },
+              { label: " 프로필", key: "profile" }, // remember to pass the key prop
+              { label: "프로필 수정", key: "edit-profile" }, // which is required
+              { label: "로그아웃", key: "logout" }, // which is required
             ]}
-            onClick={() => {
-              dispatch(deleteToken());
+            onClick={({ key }) => {
+              // console.log(key);
+              if (key === "logout") {
+                dispatch(deleteToken());
+              } else if (key === "profile") {
+                navigate(`/accounts/profile/${username}/`);
+              } else if (key === "edit-profile") {
+              }
             }}
-          ></Menu>
+          />
         </div>
       </div>
 
