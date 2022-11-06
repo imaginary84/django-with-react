@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { Avatar, Button, Card, Input } from "antd";
 import { HeartOutlined, HeartTwoTone } from "@ant-design/icons";
-import Axios from "axios";
-import { useAppContext } from "appStore";
-import { useFetch } from "utils/useFetch";
 import CommentList from "./CommentList";
 
 const Post = ({ post, handleLike }) => {
@@ -17,33 +14,6 @@ const Post = ({ post, handleLike }) => {
     author: { id: authorId, name, username, avatar_url },
   } = post;
 
-  // const [commentList, setCommentList] = useState([]);
-  // const [error, setError] = useState(false);
-  // const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   const fetchCommet = async () => {
-  //     try {
-  //       //
-  //       setLoading(true);
-  //       const headers = { Authorization: `Bearer ${access}` };
-  //       const response = await Axios({
-  //         method: "GET",
-  //         url: `http://localhost:8000/api/posts/${post.id}/comments/`,
-  //         headers,
-  //       });
-  //       setCommentList(response.data);
-
-  //       setLoading(false);
-  //     } catch (error) {
-  //       //
-  //       setError(false);
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchCommet();
-  // }, []);
-
   return (
     <div>
       <Card
@@ -51,12 +21,7 @@ const Post = ({ post, handleLike }) => {
           <div>
             <Avatar
               size="default"
-              icon={
-                <img
-                  src={"http://localhost:8000" + avatar_url}
-                  alt={username}
-                />
-              }
+              icon={<img src={avatar_url} alt={username} />}
               style={{ marginRight: "15px" }}
             />
             {username}-{id}

@@ -1,7 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { Button, Input } from "antd";
-import { useExecute, useFetch } from "utils/useFetch";
+import { useFetch } from "utils/useFetch";
 import Comment from "./Comment";
+import { axiosInstance } from "utils/useFetch";
+import { useAppContext } from "appStore";
+import { API_HOST } from "Constants";
 
 export default function CommentList({ post }) {
   const [commentContent, setCommentContent] = useState("");
@@ -11,23 +14,26 @@ export default function CommentList({ post }) {
     dataList: originCommentList,
     loading,
     error,
+    fetch,
   } = useFetch({
-    method: "GET",
-    url: `http://localhost:8000/api/posts/${post.id}/comments/`,
+    url: `/api/posts/${post.id}/comments/`,
   });
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   useEffect(() => {
     setCommentList(originCommentList);
   }, [originCommentList]);
 
-  const { execute: commentFunc } = useExecute({
-    method: "POST",
-    url: `http://localhost:8000/api/posts/${post.id}/comments/`,
-  });
-
   const handleClick = useCallback(async () => {
     try {
-      const response = await commentFunc({ data: { message: commentContent } });
+      const response = await axiosInstance({
+        method: "POST",
+        url: `/api/posts/${post.id}/comments/`,
+        data: { message: commentContent },
+      });
 
       setCommentList((prev) => [...prev, response.data]);
       setCommentContent("");

@@ -1,34 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import PostList from "components/PostList";
 import AppLayout from "components/AppLayout";
-import StoryList from "components/StoryList";
 import SuggestionList from "components/SuggestionList";
 
-import { Avatar, Button } from "antd";
+import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios";
-import { useAppContext } from "appStore";
+import { axiosInstance } from "utils/useFetch";
 import MiniProfile from "components/MiniProfile";
+
+import { useAppContext } from "appStore";
 
 function Home() {
   const navigate = useNavigate();
   const handleClick = (e) => {
     navigate("/posts/new/");
   };
-  const {
-    store: { access },
-  } = useAppContext();
 
   const [profile, setProfile] = useState();
 
   const fetchProfile = async () => {
     try {
-      const response = await Axios({
+      const response = await axiosInstance({
         method: "GET",
-        url: `http://localhost:8000/accounts/profile/my/`,
-        headers: { Authorization: `Bearer ${access}` },
+        url: `/accounts/profile/my/`,
       });
-
       setProfile(response.data);
     } catch (error) {}
   };

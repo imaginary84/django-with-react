@@ -1,14 +1,9 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useMemo } from "react";
 import Post from "./Post";
-import Axios from "axios";
 import { useAppContext } from "appStore";
-import { useExecute, useFetchPagination } from "utils/useFetch";
+import { useFetchPagination, axiosInstance } from "utils/useFetch";
 
 function PostList() {
-  const { store, dispatch } = useAppContext();
-  const { access, refresh, username } = store;
-  const headers = useMemo(() => ({ Authorization: `Bearer ${access}` }), []);
-
   const {
     dataList: postList,
     setDataList: setPostList,
@@ -19,26 +14,18 @@ function PostList() {
     finalPage,
   } = useFetchPagination({
     method: "GET",
-    url: "http://localhost:8000/api/posts/",
-    params: { username, profile: "N" },
-    iPageSize: 10,
-  });
-
-  const { executeFunc: likeFunc } = useExecute({
-    method: "POST",
-    url: `http://localhost:8000/api/posts/`,
-  });
-
-  const { executeFunc: unlikeFunc } = useExecute({
-    method: "DELETE",
-    url: `http://localhost:8000/api/posts/`,
+    url: "/api/posts/",
+    // params: { username, profile: "N" },
+    initialPageSize: 10,
   });
 
   //좋아요 를 처리하는 함수.
   const handleLike = async ({ post, is_like }) => {
     try {
-      if (is_like) await likeFunc({ url2: post.id + "/like/" });
-      else await unlikeFunc({ url2: post.id + "/like/" });
+      await axiosInstance({
+        method: is_like ? "POST" : "DELETE",
+        url: `/api/posts/${post.id}/like/`,
+      });
 
       setPostList((prevPostList) =>
         prevPostList.map((prevPost) => {
@@ -54,7 +41,6 @@ function PostList() {
 
   return (
     <div>
-      {page + " / " + finalPage}
       {loading && <div>Loading...</div>}
       {error && <div>로딩 중 에러가 발생했습니다.</div>}
       {postList &&

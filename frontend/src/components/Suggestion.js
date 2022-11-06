@@ -12,9 +12,7 @@ export default function Suggestion(props) {
       <div className="avatar">
         <Avatar
           size={"large"}
-          icon={
-            <img src={"http://localhost:8000" + avatar_url} alt={username} />
-          }
+          icon={<img src={avatar_url} alt={username} />}
           className="cursor"
         />
       </div>

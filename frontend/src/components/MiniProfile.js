@@ -10,12 +10,7 @@ export default function MiniProfile({ profile }) {
   return (
     <Card.Meta
       avatar={
-        <Avatar
-          size="large"
-          icon={
-            <img src={"http://localhost:8000" + avatar_url} alt={username} />
-          }
-        />
+        <Avatar size="large" icon={<img src={avatar_url} alt={username} />} />
       }
       title={username}
       description={name}

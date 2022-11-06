@@ -1,4 +1,4 @@
-import axios from "axios";
+import { axiosInstance } from "utils/useFetch";
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "appStore";
 import PostList2 from "components/PostList2";
@@ -7,19 +7,15 @@ import "./accounts.scss";
 import { useParams } from "react-router-dom";
 
 function Profile() {
-  const { store, dispatch } = useAppContext();
-  const { access, refresh } = store;
-  const headers = { Authorization: `Bearer ${access}` };
   const params = useParams();
 
   const [profile, setProfile] = useState(null);
 
   const profileFetch = async () => {
     try {
-      const response = await axios({
+      const response = await axiosInstance({
         method: "GET",
-        url: `http://localhost:8000/accounts/profile/${params.username}/`,
-        headers,
+        url: `/accounts/profile/${params.username}/`,
       });
       setProfile(response.data);
     } catch (error) {}
@@ -37,7 +33,7 @@ function Profile() {
             <div className="profile-1-1">
               <img
                 className="avatar"
-                src={"http://localhost:8000" + profile.avatar_url}
+                src={profile.avatar_url}
                 alt="testuser4"
               />
             </div>

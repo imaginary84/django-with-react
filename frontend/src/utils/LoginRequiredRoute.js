@@ -2,10 +2,8 @@ import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAppContext } from "appStore";
 
-export default function LoginRequiredRoute(props) {
+export default function LoginRequiredRoute({ children }) {
   const location = useLocation();
-
-  const { children } = props;
 
   const {
     store: { isAuthenticated },

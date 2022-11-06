@@ -11,9 +11,7 @@ export default function Comment({ comment }) {
   return (
     <AntdComment
       author={username}
-      avatar={
-        <Avatar src={"http://localhost:8000" + avatar_url} alt={username} />
-      }
+      avatar={<Avatar src={avatar_url} alt={username} />}
       content={<p>{message}</p>}
       datetime={
         <Tooltip title={moment().format(created_at)}>

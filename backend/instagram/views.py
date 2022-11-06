@@ -38,7 +38,7 @@ class PostViewSet(ModelViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
         user = self.request.user
-        print(self.request.GET)
+        # print(self.request.GET)
 
         # 프로필인경우는 해당 유저의 포스팅만 조회
         if self.request.GET.get("profile") == "Y":

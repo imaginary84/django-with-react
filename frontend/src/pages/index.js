@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
 // import AppLayout from "components/AppLayout";
 import About from "./About";

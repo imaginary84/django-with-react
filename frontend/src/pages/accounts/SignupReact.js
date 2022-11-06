@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-import Axios from "axios";
+import { axiosInstance } from "utils/useFetch";
 
 import { Alert } from "antd";
 
 import { useNavigate } from "react-router-dom";
 
-const apiUrl = "http://localhost:8000/accounts/signup/";
+const apiUrl = "/accounts/signup/";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -27,7 +27,8 @@ export default function Signup() {
 
     setErrors({});
 
-    Axios.post(apiUrl, inputs)
+    axiosInstance
+      .post(apiUrl, inputs)
       .then((response) => {
         console.log("response :", response);
         navigate("/accounts/login");

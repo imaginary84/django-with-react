@@ -3,8 +3,8 @@ import { Button, Form, Input, Modal, Upload, notification } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { getBase64FromFile } from "utils/Base64";
 import { useNavigate } from "react-router-dom";
-import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
-import Axios from "axios";
+import { FrownOutlined } from "@ant-design/icons";
+import { axiosInstance } from "utils/useFetch";
 import { useAppContext } from "appStore";
 import { parseErrorMessages } from "utils/form";
 
@@ -15,10 +15,6 @@ export default function PostNewForm() {
     visible: false,
     base64: null,
   });
-  const {
-    store: { access, refresh },
-    dispatch,
-  } = useAppContext();
   const navigate = useNavigate();
 
   const handleUploadChange = ({ fileList }) => {
@@ -46,14 +42,13 @@ export default function PostNewForm() {
       formData.append("photo", file.originFileObj);
     });
 
-    const headers = { Authorization: `Bearer ${access}` };
     try {
-      const response = await Axios.post(
-        "http://localhost:8000/api/posts/",
-        formData,
-        { headers }
-      );
-      console.log("success response :", response);
+      const response = await axiosInstance({
+        method: "POST",
+        url: "/api/posts/",
+        data: formData,
+      });
+
       navigate("/");
     } catch (error) {
       if (error.response) {
@@ -73,20 +68,6 @@ export default function PostNewForm() {
       }
     }
   };
-
-  // useEffect(() => {
-  //   // debugger;
-  //   if (error.status && !error.flag) {
-  //     navigate("/");
-  //   } else if (error.flag) {
-  //     // && error.status === 500) {
-  //     notification.open({
-  //       message: "서버 오류",
-  //       description: `HTTP ${error.status} 응답을 받았습니다. 서버 에러를 확인해주세요.`,
-  //       icon: <FrownOutlined style={{ color: "#ff3333" }} />,
-  //     });
-  //   }
-  // }, [error]);
 
   return (
     <Form

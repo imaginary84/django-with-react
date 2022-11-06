@@ -2,26 +2,23 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Card } from "antd";
 import Suggestion from "./Suggestion";
 import "./SuggestionList.scss";
-import Axios from "axios";
+import { axiosInstance } from "utils/useFetch";
 import { useAppContext } from "appStore";
-import { useFetch, useExecute } from "utils/useFetch";
+import { useFetch } from "utils/useFetch";
 
 export default function SuggestionList({ style }) {
-  const { store, dispatch } = useAppContext();
-  const { access, refresh } = store;
-  const headers = useMemo(
-    () => ({ Authorization: `Bearer ${access}` }),
-    [access]
-  );
-
   const {
     dataList: originUserList,
     loading,
     error,
+    fetch,
   } = useFetch({
-    method: "GET",
-    url: "http://localhost:8000/accounts/suggestions/",
+    url: "/accounts/suggestions/",
   });
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   useEffect(() => {
     if (!originUserList) setUserList([]);
@@ -31,14 +28,13 @@ export default function SuggestionList({ style }) {
 
   const [userList, setUserList] = useState([]);
 
-  const { executeFunc: followFunc } = useExecute({
-    method: "POST",
-    url: "http://localhost:8000/accounts/follow/",
-  });
-
   const onFollowUser = async (username) => {
     try {
-      await followFunc({ data: { following_user: username } });
+      await axiosInstance({
+        method: "POST",
+        url: "/accounts/follow/",
+        data: { following_user: username },
+      });
 
       setUserList((prevUserList) => {
         let result = [];

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Axios from "axios";
+import { axiosInstance } from "utils/useFetch";
 
 import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
@@ -26,10 +26,7 @@ export default function Signup() {
 
         setFieldErrors({});
 
-        const response = await Axios.post(
-          "http://localhost:8000/accounts/signup/",
-          data
-        );
+        const response = await axiosInstance.post("/accounts/signup/", data);
 
         notification.open({
           message: "회원가입 성공",
