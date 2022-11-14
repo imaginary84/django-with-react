@@ -21,11 +21,11 @@ class CustomAuthentication(JWTAuthentication):
     def authenticate(self, request):
         header = self.get_header(request)
 
-        print(0, header)
+        # print(0, header)
 
         if header is None:
             raw_token = request.COOKIES.get(settings.SIMPLE_JWT["AUTH_COOKIE"]) or None
-            print("raw_token1", raw_token)
+            # print("raw_token1", raw_token)
             if (
                 request.path == "/accounts/login/"
                 or request.path == "/accounts/refresh/"
@@ -33,15 +33,15 @@ class CustomAuthentication(JWTAuthentication):
             ):
                 raw_token = None
 
-            print("raw_token2", raw_token)
+            # print("raw_token2", raw_token)
         else:
             raw_token = self.get_raw_token(header)
         if raw_token is None:
             return None
 
         validated_token = self.get_validated_token(raw_token)
-        print("validated_token", validated_token)
+        # print("validated_token", validated_token)
         enforce_csrf(request)
 
-        print("get_user", self.get_user(validated_token))
+        # print("get_user", self.get_user(validated_token))
         return self.get_user(validated_token), validated_token

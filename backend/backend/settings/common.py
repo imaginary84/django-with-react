@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # local apps
     "accounts",
     "instagram",
+    "blog",
 ]
 
 MIDDLEWARE = [
@@ -156,8 +157,8 @@ SIMPLE_JWT = {
     "SIGNING_KEY": SECRET_KEY,
     "ALGORITHM": "HS256",
     "ROTATE_REFRESH_TOKENS": True,
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(hours=6),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=5),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=6),
     "AUTH_COOKIE": "access",  # Cookie name. Enables cookies if value is set.
     "AUTH_COOKIE_DOMAIN": None,  # A string like "example.com", or None for standard domain cookie.
     "AUTH_COOKIE_SECURE": False,  # Whether the auth cookies should be secure (https:// only).
