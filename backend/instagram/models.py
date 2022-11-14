@@ -2,6 +2,7 @@ import re
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from imagekit.models import ProcessedImageField
 
 # from django.contrib.auth import get_user_model
 # from django_pydenticon.views import image as django_pydenticon
@@ -20,7 +21,10 @@ class Post(TimestampedModel):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="my_post_set", on_delete=models.CASCADE
     )
-    photo = models.ImageField(upload_to="instagram/post/%Y/%m/%d")
+    # photo = models.ImageField(upload_to="instagram/post/%Y/%m/%d")
+    photo = ProcessedImageField(
+        upload_to="instagram/post/%Y/%m/%d", format="JPEG", options={"quality": 80}
+    )
     caption = models.CharField(max_length=500)
     tag_set = models.ManyToManyField("Tag", blank=True)
     location = models.CharField(max_length=100)

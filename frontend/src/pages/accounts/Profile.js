@@ -1,6 +1,5 @@
 import { axiosInstance } from "utils/useFetch";
 import React, { useEffect, useState } from "react";
-import { useAppContext } from "appStore";
 import PostList2 from "components/PostList2";
 
 import "./accounts.scss";
@@ -18,7 +17,9 @@ function Profile() {
         url: `/accounts/profile/${params.username}/`,
       });
       setProfile(response.data);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

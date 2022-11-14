@@ -1,6 +1,5 @@
-import React, { useMemo } from "react";
+import React from "react";
 import Post from "./Post";
-import { useAppContext } from "appStore";
 import { useFetchPagination, axiosInstance } from "utils/useFetch";
 
 function PostList() {

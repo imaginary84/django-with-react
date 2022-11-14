@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input } from "antd";
 import { useFetch } from "utils/useFetch";
 import Comment from "./Comment";
 import { axiosInstance } from "utils/useFetch";
-import { useAppContext } from "appStore";
-import { API_HOST } from "Constants";
 
 export default function CommentList({ post }) {
   const [commentContent, setCommentContent] = useState("");
@@ -27,20 +25,31 @@ export default function CommentList({ post }) {
     setCommentList(originCommentList);
   }, [originCommentList]);
 
-  const handleClick = useCallback(async () => {
+  const handleClick = async () => {
+    // debugger;
+
+    const data = { message: commentContent };
+
     try {
-      const response = await axiosInstance({
-        method: "POST",
-        url: `/api/posts/${post.id}/comments/`,
-        data: { message: commentContent },
-      });
+      // const response = await axiosInstance({
+      //   method: "POST",
+      //   url: `/api/posts/${post.id}/comments/`,
+      //   data: {
+      //     firstName: "Fred",
+      //     lastName: "Flintstone",
+      //   },
+      // });
+      const response = await axiosInstance.post(
+        `/api/posts/${post.id}/comments/`,
+        data
+      );
 
       setCommentList((prev) => [...prev, response.data]);
       setCommentContent("");
     } catch (error) {
       console.log("댓글쓰기 오류", error);
     }
-  }, [commentContent]);
+  };
 
   return (
     <div>

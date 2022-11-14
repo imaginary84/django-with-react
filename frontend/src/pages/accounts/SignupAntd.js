@@ -8,6 +8,8 @@ import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 import { parseErrorMessages } from "utils/form";
+import Axios from "axios";
+import { API_HOST } from "Constants";
 
 const apiUrl = "";
 
@@ -26,7 +28,12 @@ export default function Signup() {
 
         setFieldErrors({});
 
-        const response = await axiosInstance.post("/accounts/signup/", data);
+        // const response = await axiosInstance.post("/accounts/signup/", data);
+        const response = await Axios({
+          method: "post",
+          url: API_HOST + "/accounts/signup/",
+          data,
+        });
 
         notification.open({
           message: "회원가입 성공",

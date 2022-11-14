@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Axios from "axios";
-import { useAppContext } from "appStore";
 import { API_HOST } from "Constants";
-// import { useAppContext } from "appStore";
 
 //csrf token
 function getCookie(name) {
@@ -23,14 +21,38 @@ function getCookie(name) {
 
 export const axiosInstance = Axios.create({
   baseURL: API_HOST,
-  method: "POST",
   withCredentials: true,
-  headers: { "X-CSRFToken": getCookie("csrftoken") },
+  headers: {
+    "X-CSRFToken": getCookie("csrftoken"),
+  },
 });
 
 axiosInstance.interceptors.request.use(
-  function (config) {
-    return config;
+  async function (config) {
+    try {
+      const res1 = await Axios({
+        method: "POST",
+        url: API_HOST + "/accounts/refresh/",
+        withCredentials: true,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        data: {
+          refresh: JSON.parse(window.localStorage.getItem("refresh")),
+        },
+      });
+
+      window.localStorage.setItem("refresh", JSON.stringify(res1.data.refresh));
+
+      return config;
+    } catch (err) {
+      window.localStorage.setItem("refresh", '""');
+
+      window.location.href = "/";
+
+      return Promise.reject({
+        status: "logout",
+        message: "리프레쉬 토큰 만료됨. 로그아웃 상태.",
+      });
+    }
   },
   function (error) {
     return Promise.reject(error);
@@ -41,45 +63,7 @@ axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error) => {
-    if (error.response) {
-      const {
-        data: { code },
-        config,
-      } = error.response;
-
-      if (code === "token_not_valid") {
-        try {
-          const res1 = await Axios({
-            method: "POST",
-            url: API_HOST + "/accounts/refresh/",
-            withCredentials: true,
-            headers: { "X-CSRFToken": getCookie("csrftoken") },
-            data: {
-              refresh: JSON.parse(window.localStorage.getItem("refresh")),
-            },
-          });
-
-          window.localStorage.setItem(
-            "refresh",
-            JSON.stringify(res1.data.refresh)
-          );
-
-          Axios({
-            ...config,
-            withCredentials: true,
-            headers: { "X-CSRFToken": getCookie("csrftoken") },
-          }).then((res2) => res2);
-        } catch (err) {
-          window.localStorage.setItem("refresh", '""');
-
-          return Promise.reject({
-            status: "logout",
-            message: "리프레쉬 토큰 만료됨. 로그아웃 상태.",
-          });
-        }
-      }
-    }
+  (error) => {
     return Promise.reject(error);
   }
 );
@@ -135,10 +119,12 @@ export function useFetchPagination({
         url: url + `?page=${page}&page_size=${pageSize}`,
         params,
       });
+      // console.log("요청 성공", response);
       setLoading(false);
       setAppendDataList(response.data.results);
       setFinalPage(Math.ceil(response.data.count / pageSize));
     } catch (error) {
+      console.log("요청 실패", error);
       setError(true);
       setLoading(false);
     }
@@ -171,7 +157,8 @@ export function useFetchPagination({
   // 첫 조회전후로 하여 마지막 페이지가 1페이지인경우 감시하지않는다.
   useEffect(() => {
     // console.log(infinite);
-    if (finalPage !== 1) {
+    // debugger;
+    if (finalPage !== 1 && more.current) {
       //옵져버 탐색 시작
       observer.observe(more.current);
     }

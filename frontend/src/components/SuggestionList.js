@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "antd";
 import Suggestion from "./Suggestion";
 import "./SuggestionList.scss";
 import { axiosInstance } from "utils/useFetch";
-import { useAppContext } from "appStore";
 import { useFetch } from "utils/useFetch";
 
 export default function SuggestionList({ style }) {

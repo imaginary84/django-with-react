@@ -91,5 +91,20 @@ class CommentViewSet(ModelViewSet):
         return qs
 
     def perform_create(self, serializer):
+        print("한재성 테스트1 :", self.kwargs["post_pk"])
         post = get_object_or_404(Post, pk=self.kwargs["post_pk"])
         serializer.save(author=self.request.user, post=post)
+
+    def create(self, request, *args, **kwargs):
+        print("한재성 테스트2 :", self.kwargs["post_pk"])
+        print("한재성 테스트3 :", request.data)
+        serializer = self.get_serializer(data=request.data)
+        print("한재성 테스트4 :", request)
+
+        print("한재성 테스트5 :", request.POST)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )

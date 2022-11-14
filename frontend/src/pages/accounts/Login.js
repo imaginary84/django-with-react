@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { axiosInstance } from "utils/useFetch";
+import Axios from "axios";
 import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAppContext, setToken } from "appStore";
 import { parseErrorMessages } from "utils/form";
+import { API_HOST } from "Constants";
 
 import "./accounts.scss";
 
@@ -25,17 +26,12 @@ function Login() {
 
         setFieldErrors({});
 
-        // const response2 = await axiosInstance.post(
-        //   "/accounts/token/",
-        //   logindata
-        // );
-
-        const response = await axiosInstance({
+        const response = await Axios({
           method: "POST",
-          url: "/accounts/login/",
+          url: API_HOST + "/accounts/login/",
           data: logindata,
         });
-        debugger;
+
         const { data } = response;
 
         dispatch(setToken(data));
@@ -75,7 +71,6 @@ function Login() {
             span: 16,
           }}
           onFinish={onFinish}
-          // onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <Form.Item
