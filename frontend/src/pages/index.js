@@ -6,6 +6,7 @@ import Home from "./Home";
 import AccountRoutes from "./accounts";
 import LoginRequiredRoute from "utils/LoginRequiredRoute";
 import PostNew from "./PostNew";
+import BlogHome from "../blog";
 
 function Root() {
   return (
@@ -28,6 +29,7 @@ function Root() {
           </LoginRequiredRoute>
         }
       />
+      <Route path="/blog/*" element={<BlogHome />} />
       <Route path="/*" element={<div>존재하지않는 페이지입니다.</div>} />
     </Routes>
   );

@@ -13,3 +13,14 @@ class Blog(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-id"]
+
+    def __str__(self):
+        return self.title
+
+
+class File(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    file = models.ImageField(upload_to="blog/%Y/%m/%d", blank=True)
