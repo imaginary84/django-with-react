@@ -30,6 +30,7 @@ function Login() {
           method: "POST",
           url: API_HOST + "/accounts/login/",
           data: logindata,
+          withCredentials: true,
         });
 
         const { data } = response;

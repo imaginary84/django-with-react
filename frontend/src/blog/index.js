@@ -4,6 +4,7 @@ import LoginRequiredRoute from "utils/LoginRequiredRoute";
 import { BlogNew } from "./BlogNew";
 import { BlogList } from "./BlogList";
 import { BlogDetail } from "./BlogDetail";
+import { BlogEdit } from "./BlogEdit";
 
 function BlogHome() {
   return (
@@ -19,7 +20,8 @@ function BlogHome() {
           }
         ></Route>
         <Route path="new" element={<BlogNew />} />
-        <Route path="detail/:pk" element={<BlogDetail />} />
+        <Route path=":pk" element={<BlogDetail />} />
+        <Route path=":pk/edit" element={<BlogEdit />} />
       </Routes>
     </>
   );

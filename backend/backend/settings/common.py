@@ -145,8 +145,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "backend.authenticate.CustomAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.BasicAuthentication",
     ],
 }
 
@@ -158,7 +158,7 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "ROTATE_REFRESH_TOKENS": True,
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=5),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=6),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(hours=10),
     "AUTH_COOKIE": "access",  # Cookie name. Enables cookies if value is set.
     "AUTH_COOKIE_DOMAIN": None,  # A string like "example.com", or None for standard domain cookie.
     "AUTH_COOKIE_SECURE": False,  # Whether the auth cookies should be secure (https:// only).

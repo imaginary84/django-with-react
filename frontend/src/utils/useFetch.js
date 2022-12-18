@@ -1,23 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Axios from "axios";
 import { API_HOST } from "Constants";
-
-//csrf token
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    var cookies = document.cookie.split(";");
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === name + "=") {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
+import { getCookie } from "./getCookie";
 
 export const axiosInstance = Axios.create({
   baseURL: API_HOST,
@@ -73,11 +57,11 @@ export function useFetch({ url, method = "GET" }) {
   const [loading, setLoading] = useState(false);
   const [dataList, setDataList] = useState([]);
 
-  const fetch = async () => {
+  const fetch = async (input) => {
     try {
       setLoading(true);
 
-      const response = await axiosInstance({ method, url });
+      const response = await axiosInstance({ method, url, data: input });
 
       setLoading(false);
       setDataList(response.data);

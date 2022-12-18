@@ -29,6 +29,7 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
+        print("request.user", request.user)
 
         serializer = self.get_serializer(data=request.data)
 
@@ -62,6 +63,42 @@ class CustomTokenRefreshView(TokenRefreshView):
         return response
 
 
+@api_view(["POST"])
+def CustomTokenRefreshView2(request):
+    user = get_object_or_404(get_user_model(), username=request.user.username)
+    data = get_tokens_for_user(user)
+
+    response = Response()
+    response.set_cookie(
+        key=settings.SIMPLE_JWT["AUTH_COOKIE"],
+        value=data["access"],
+        expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
+        secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+        httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+        samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+    )
+
+    response.set_cookie(
+        key="username",
+        value=user.username,
+        expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
+        secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+        # httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+        samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+    )
+
+    csrf.get_token(request)
+    response.data = {
+        "Success": "Refresh successfully",
+        "refresh": data.get("refresh", ""),
+        # "username": user.username,
+    }
+
+    # print("response.data", response.data)
+
+    return response
+
+
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
     return {
@@ -84,6 +121,7 @@ class LoginView(APIView):
         if user is not None:
             if user.is_active:
                 data = get_tokens_for_user(user)
+                print("data", data)
                 response.set_cookie(
                     key=settings.SIMPLE_JWT["AUTH_COOKIE"],
                     value=data["access"],
@@ -97,7 +135,10 @@ class LoginView(APIView):
                 response.data = {
                     "Success": "Login successfully",
                     "refresh": data.get("refresh", ""),
+                    "username": username,
                 }
+
+                print("Login response.data", response.data)
 
                 return response
             else:
@@ -133,7 +174,10 @@ class RefreshView(APIView):
         response.data = {
             "Success": "Refresh successfully",
             "refresh": data.get("refresh", ""),
+            "username": user.username,
         }
+
+        # print("response.data", response.data)
 
         return response
 

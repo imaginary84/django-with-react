@@ -19,9 +19,12 @@ const reducer = (prev, action) => {
       username,
       isAuthenticated: true,
     };
+
+    // debugger;
+
     return UpdateWithSideEffect(newState, (state, dispatch) => {
       refresh && setStorageItem("refresh", refresh);
-      username && setStorageItem("username", username);
+      // username && setStorageItem("username", username);
     });
   } else if (type === DELETE_TOKEN) {
     const newState = {
@@ -32,7 +35,7 @@ const reducer = (prev, action) => {
     };
     return UpdateWithSideEffect(newState, (state, dispatch) => {
       setStorageItem("refresh", "");
-      setStorageItem("username", "");
+      // setStorageItem("username", "");
     });
   }
   return prev;

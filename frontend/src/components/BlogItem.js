@@ -3,6 +3,8 @@ import { Row, Col } from "antd";
 import "./Blog.scss";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { API_HOST } from "Constants";
+import { FileImageOutlined } from "@ant-design/icons";
 
 export const BlogItem = ({ data }) => {
   return (
@@ -11,9 +13,12 @@ export const BlogItem = ({ data }) => {
         <Col span={3}>
           <div className="header">{data.id}</div>
         </Col>
-        <Col span={15}>
+        <Col span={12}>
           <div className="header ctt-title">
-            <Link to={`detail/${data.id}`}>{data.title}</Link>
+            <Link to={`${data.id}`}>
+              {data.file_exist ? <FileImageOutlined /> : ""}
+              {data.title}
+            </Link>
           </div>
         </Col>
         <Col span={3}>
@@ -21,8 +26,6 @@ export const BlogItem = ({ data }) => {
         </Col>
         <Col span={3}>
           <div className="header">
-            {/* {data.created_at} */}
-            {/* {moment(data.created_at).format("YYYY-MM-DD, h:mm:ss a")} */}
             {moment(data.created_at).format("YYYY. MM. DD.")}
           </div>
         </Col>

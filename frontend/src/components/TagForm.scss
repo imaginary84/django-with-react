@@ -1,0 +1,99 @@
+*{
+  margin: 0;
+  padding:0;
+  box-sizing: border-box;
+}
+
+p{
+  margin: 0;
+}
+
+.layout{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #5372f0;
+}
+
+.wrapper{
+  width: 490px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 18px 25px 20px;
+}
+
+.wrapper :where(.title, li, li span, .details) {
+  display:flex;
+  align-items: center;
+}
+
+.wrapper .title h2{
+  font-size: 21px;
+  font-weight: 600;
+}
+
+
+.wrapper .content{
+  margin : 10px 0;
+}
+
+.content p{
+  font-size: 15px;
+}
+
+.content ul{
+  display: flex;
+  flex-wrap: wrap;
+  border : 1px solid #a6a6a6;
+  border-radius: 5px;
+  padding: 7px;
+  margin : 12px 0;
+}
+
+.content ul li{
+  list-style: none;
+  padding: 5px 8px 5px 10px;
+  background-color: #f2f2f2;
+  margin: 4px 3px;
+  border-radius: 5px;
+  border : 1px solid #e3d1e1;
+}
+
+.content ul li>span>span{
+    height : 20px;
+    width: 20px;
+    background-color: #dfdfdf;
+    border-radius: 50%;
+    font-size: 12px;
+    justify-content: center;
+    margin-left : 8px;
+    color : #808080;
+    cursor: pointer;
+}
+
+.content ul input{
+  flex: 1;
+  border : none;
+  outline: none;
+  padding: 5px;
+  font-size: 16px;
+  width:10px;
+}
+
+.wrapper .details{
+  // display: flex;
+  justify-content: space-between;
+  // align-items: center;
+}
+
+.details button{
+  border : none;
+  outline:  none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  padding : 9px 15px;
+  border-radius: 5px;
+  background-color: #5372f0;
+}

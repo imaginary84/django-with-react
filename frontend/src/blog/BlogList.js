@@ -1,20 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { BlogItem } from "../components/BlogItem";
-import { Row, Col, Divider } from "antd";
+import { Row, Col, Divider, Pagination } from "antd";
 import "../components/Blog.scss";
 import { useNavigate } from "react-router-dom";
-import { useFetch } from "utils/useFetch";
+import { axiosInstance } from "utils/useFetch";
+import Axios from "axios";
 
 export const BlogList = () => {
+  const [dataList, setDataList] = useState({});
+  const pageSize = useMemo(() => 10, []);
   const navigate = useNavigate();
   const handleBlogNewClick = () => {
     navigate("/blog/new/");
   };
 
-  const { dataList, fetch: BlogListFetch } = useFetch({
-    url: "/blog/",
-    method: "GET",
-  });
+  const BlogListFetch = async (page = 1) => {
+    try {
+      const response = await axiosInstance({
+        method: "GET",
+        url: `/blog/?page_size=${pageSize}&page=${page}`,
+      });
+
+      setDataList(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     BlogListFetch();
@@ -26,7 +37,7 @@ export const BlogList = () => {
         <Col span={3}>
           <div className="header">글번호</div>
         </Col>
-        <Col span={15}>
+        <Col span={12}>
           <div className="header">제목</div>
         </Col>
         <Col span={3}>
@@ -37,11 +48,22 @@ export const BlogList = () => {
         </Col>
       </Row>
       <Divider />
-      {dataList.map((data) => (
-        <BlogItem key={data.id} data={data} />
-      ))}
+      {/* {dataList && JSON.stringify(dataList)} */}
+      {dataList.results &&
+        dataList.results.map((data) => <BlogItem key={data.id} data={data} />)}
       <Divider />
-      Pagination 1,2,3,4,5
+      <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        {dataList.results && (
+          <Pagination
+            defaultCurrent={1}
+            total={dataList.count}
+            pageSize={pageSize}
+            onChange={(page) => {
+              BlogListFetch(page);
+            }}
+          />
+        )}
+      </div>
       <hr />
       <input type="button" value="새 글" onClick={handleBlogNewClick} />
     </>

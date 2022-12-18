@@ -7,6 +7,7 @@ import Root from "pages";
 import App from "App";
 import App2 from "App2";
 // import App3 from "App3";
+import { TagForm } from "components/TagForm";
 
 import { AppProvider } from "appStore";
 
@@ -15,7 +16,7 @@ root.render(
   <BrowserRouter>
     <AppProvider>
       <Root />
-      {/* <App3 /> */}
+      {/* <TagForm /> */}
     </AppProvider>
   </BrowserRouter>
 );

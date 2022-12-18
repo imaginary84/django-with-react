@@ -24,3 +24,14 @@ class Blog(models.Model):
 class File(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     file = models.ImageField(upload_to="blog/%Y/%m/%d", blank=True)
+
+    class Meta:
+        ordering = ["-id"]
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    blog_set = models.ManyToManyField(Blog, related_name="tag_set", blank=True)
+
+    def __str__(self):
+        return self.name
